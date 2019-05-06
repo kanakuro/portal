@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "jquery": "^3.4.0",
+    "simple-sidebar": "^2.8.3",
+    "simpler-sidebar": "^2.2.5",
+    "webpack": "^4.30.0"
+  }
+}

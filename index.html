@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="sidebar" class="sidebar">
+      <button class="menuListClose" id="menuClose">
+        ×
+      </button>
+      <ul>
+        <li class="close-sidebar" href="#">schedule</li>
+        <li class="close-sidebar" href="#">news</li>
+        <li class="close-sidebar" href="#">weather</li>
+        <li class="close-sidebar" href="#">album</li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="header">
+        <div class="headerLine">
+          <button class="menuListOpen" id="button">
+            <span id="toggle-sidebar" class="button icon">
+              <img
+                src="burgerMenu.png"
+                width="28px"
+                height="28px"
+                class="burgerMenu"
+              />
+            </span>
+          </button>
+          <div class="logo">my portal</div>
+        </div>
+      </div>
+      <div class="top">
+        <div class="title">
+          <div class="titleFont">
+            portal
+          </div>
+        </div>
+        <div>
+          <div class="scheduleDiv">
+            <div class="title2">schedule</div>
+            <div class="content1">
+              <button id="prev" type="button">前の月</button>
+              <button id="next" type="button">次の月</button>
+              <div id="calendar"></div>
+            </div>
+          </div>
+          <div class="weatherDiv">
+            <div class="title3">weather</div>
+            <div class="content1">
+              <div id="result"><button id="btn1">API</button></div>
+            </div>
+          </div>
+          <div class="newsDiv">
+            <div class="title4">news</div>
+          </div>
+          <div class="albumDiv">
+            <div class="title4">album</div>
+            <div class="content4">
+              <div class="albums">
+                <div class="album">
+                  <div class="new">new</div>
+                  <a
+                    href="https://photos.google.com/albums?hl=ja"
+                    target="_blank"
+                  >
+                    <div class="link">
+                      2019
+                    </div>
+                  </a>
+                </div>
+                <div class="album">
+                  <div class="new">new</div>
+                  <a
+                    href="https://photos.google.com/albums?hl=ja"
+                    target="_blank"
+                  >
+                    <div class="link">
+                      2018
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="main.js"></script>
+    <script>
+      // 天気予報api
+      $(function() {
+        $("#btn1").click(function() {
+          $.ajax({
+            url: "serverSide.php",
+            type: "GET",
+            dataType: "json"
+          })
+            .done(data => {
+              datas = JSON.parse(data);
+              console.log(datas, "done");
+            })
+            // .fail(function(xhr, textStatus, errorThrown) {
+            //   console.log("NG:" + textStatus);
+            // });
+            .fail(data => {
+              console.log(data, "fail");
+            });
+          // .always(data => {
+          //   //成功・失敗どちらでも行う処理
+          //   console.log(data, "always通った");
+          // });
+        });
+      });
+
+      // サイドバー表示
+      $(function() {
+        $("#button").click(function() {
+          $("#sidebar").toggle("slow");
+        });
+      });
+      $(function() {
+        $("#menuClose").click(function() {
+          $("#sidebar").hide("slow");
+        });
+      });
+
+      // カレンダー表示
+      window.onload = function makeCalendar() {
+        const weeks = ["日", "月", "火", "水", "木", "金", "土"];
+        const date = new Date();
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        const config = {
+          show: 1
+        };
+
+        function showCalendar(year, month) {
+          for (i = 0; i < config.show; i++) {
+            const calendarHtml = createCalendar(year, month);
+            const sec = document.createElement("section");
+            sec.innerHTML = calendarHtml;
+            document.querySelector("#calendar").appendChild(sec);
+
+            month++;
+            if (month > 12) {
+              year++;
+              month = 1;
+            }
+          }
+        }
+
+        function createCalendar(year, month) {
+          const startDate = new Date(year, month - 1, 1); // 月の最初の日を取得
+          const endDate = new Date(year, month, 0); // 月の最後の日を取得
+          const endDayCount = endDate.getDate(); // 月の末日
+          const lastMonthEndDate = new Date(year, month - 2, 0); // 前月の最後の日の情報
+          const lastMonthendDayCount = lastMonthEndDate.getDate(); // 前月の末日
+          const startDay = startDate.getDay(); // 月の最初の日の曜日を取得
+          let dayCount = 1; // 日にちのカウント
+          let calendarHtml = ""; // HTMLを組み立てる変数
+
+          calendarHtml += "<h1>" + year + "/" + month + "</h1>";
+          calendarHtml += "<table>";
+
+          // 曜日の行を作成
+          for (let i = 0; i < weeks.length; i++) {
+            calendarHtml += "<td>" + weeks[i] + "</td>";
+          }
+
+          for (let w = 0; w < 6; w++) {
+            calendarHtml += "<tr>";
+
+            for (let d = 0; d < 7; d++) {
+              if (w == 0 && d < startDay) {
+                let num = lastMonthendDayCount - startDay + d + 1;
+                calendarHtml += '<td class="is-disabled">' + num + "</td>";
+              } else if (dayCount > endDayCount) {
+                let num = dayCount - endDayCount;
+                calendarHtml += '<td class="is-disabled">' + num + "</td>";
+                dayCount++;
+              } else {
+                calendarHtml += `<td class="calendar_td" data-date="${year}/${month}/${dayCount}">${dayCount}</td>`;
+                dayCount++;
+              }
+            }
+            calendarHtml += "</tr>";
+          }
+          calendarHtml += "</table>";
+
+          return calendarHtml;
+        }
+
+        function moveCalendar(e) {
+          document.querySelector("#calendar").innerHTML = "";
+
+          if (e.target.id === "prev") {
+            month--;
+            if (month < 1) {
+              year--;
+              month = 12;
+            }
+          }
+          if (e.target.id === "next") {
+            month++;
+            if (month > 12) {
+              year++;
+              month = 1;
+            }
+          }
+          showCalendar(year, month);
+        }
+
+        document.querySelector("#prev").addEventListener("click", moveCalendar);
+        document.querySelector("#next").addEventListener("click", moveCalendar);
+        document.addEventListener("click", function(e) {
+          if (e.target.classList.contains("calendar_td")) {
+            alert("クリックした日付は" + e.target.dataset.date + "です");
+          }
+        });
+
+        showCalendar(year, month);
+      };
+    </script>
+  </body>
+</html>
