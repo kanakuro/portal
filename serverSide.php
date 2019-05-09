@@ -7,7 +7,7 @@ header( "Cache-control: no-cache" );
 header( "Access-Control-Allow-Origin: *" );
 
 if ( $_GET['city'] == '' ) {
-	$_GET['city'] = "270000";
+    $_GET['city'] = "270000";
 }
 
 $work = file_get_contents( "http://weather.livedoor.com/forecast/webservice/json/v1?city={$_GET['city']}" );
