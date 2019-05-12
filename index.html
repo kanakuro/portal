@@ -57,7 +57,7 @@
           <div class="weatherDiv">
             <div class="title3">weather</div>
             <div class="content1">
-              <div id="result"><button id="btn1">今日の天気</button></div>
+              <div id="result"><button id="btn1">天気予報</button></div>
               <div id="weather"></div>
             </div>
           </div>
@@ -110,11 +110,72 @@
             }
           })
             .done(data => {
-              console.log(data, "done");
-              console.log(data.title, data.description.text);
-              apiResults = document.createElement("");
-              apiResults.innerHTML = "<div>aaa</div>";
-              document.querySelector("weather").appendChild(apiResults);
+              var Min = { today: " -- ", tomorrow: " -- ", dayAfter: " -- " };
+              var Max = { today: " -- ", tomorrow: " -- ", dayAfter: " -- " };
+              for (let i = 0; i < 3; i++) {
+                if (data.forecasts[i].temperature.min === null) {
+                } else {
+                  if (i === 0) {
+                    Min.today = data.forecasts[i].temperature.min.celsius;
+                  } else if (i === 1) {
+                    Min.tomorrow = data.forecasts[i].temperature.min.celsius;
+                  } else if (i === 2) {
+                    Min.dayAfter = data.forecasts[i].temperature.min.celsius;
+                  }
+                }
+                if (data.forecasts[i].temperature.max === null) {
+                } else {
+                  if (i === 0) {
+                    Max.today = data.forecasts[i].temperature.max.celsius;
+                  } else if (i === 1) {
+                    Max.tomorrow = data.forecasts[i].temperature.max.celsius;
+                  } else if (i === 2) {
+                    Max.dayAfter = data.forecasts[i].temperature.max.celsius;
+                  }
+                }
+              }
+              var weatherToday =
+                '<div class="weatherTitle">' + data.title + "</div></br>";
+              weatherToday += '<div class="weatherDetail">';
+              weatherToday += '<div class="today">';
+              weatherToday +=
+                '<div class="weatherDate">' + data.forecasts[0].date + "</div>";
+              weatherToday +=
+                "<img src='" +
+                data.forecasts[0].image.url +
+                "' width='50' height='31'>";
+              weatherToday += "<div>" + data.forecasts[0].telop + "</div>";
+              weatherToday += "<div>最高気温 " + Max.today + "</div>";
+              weatherToday += "<div>最低気温 " + Min.today + "</div>";
+              weatherToday += "</div>";
+              weatherToday += '<div class="tomorrow">';
+              weatherToday +=
+                '<div class="weatherDate">' + data.forecasts[1].date + "</div>";
+              weatherToday +=
+                "<img src='" +
+                data.forecasts[1].image.url +
+                "' width='50' height='31'>";
+              weatherToday += "<div>" + data.forecasts[1].telop + "</div>";
+              weatherToday += "<div>最高気温 " + Max.tomorrow + "</div>";
+              weatherToday += "<div>最低気温 " + Min.tomorrow + "</div>";
+              weatherToday += "</div>";
+              weatherToday += '<div class="dayAfter">';
+              weatherToday +=
+                '<div  class="weatherDate">' +
+                data.forecasts[2].date +
+                "</div>";
+              weatherToday +=
+                "<img src='" +
+                data.forecasts[2].image.url +
+                "' width='50' height='31'>";
+              weatherToday += "<div>" + data.forecasts[2].telop + "</div>";
+              weatherToday += "<div>最高気温 " + Max.dayAfter + "</div>";
+              weatherToday += "<div>最低気温 " + Min.dayAfter + "</div>";
+              weatherToday += "</div></div>";
+
+              const apiResults = document.createElement("div");
+              apiResults.innerHTML = weatherToday;
+              document.querySelector("#weather").appendChild(apiResults);
             })
             .fail(data => {
               console.log(data, "fail");

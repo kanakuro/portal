@@ -149,3 +149,15 @@ td:last-child {
 td.is-disabled {
   color: #ccc;
 }
+.weatherDetail {
+  display: flex;
+  justify-content: space-between;
+}
+
+.weatherTitle {
+  font-size: 2rem;
+}
+
+.weatherDate {
+  font-size: 1rem;
+}
