@@ -94,7 +94,7 @@ li {
 .content4,
 .content5 {
   color: black;
-  padding: 0.5rem;
+  padding: 1.5rem;
   background-color: #ffffff;
   width: 70%;
   margin: 0 2rem;
@@ -113,6 +113,43 @@ li {
 }
 .link {
   padding: 0 1rem;
+}
+
+.content1 {
+  display: flex;
+}
+.planInput {
+  display: flex;
+}
+.planDetail {
+  width: 15rem;
+}
+.calendar {
+  padding: 0 2rem 0 2rem;
+}
+.calendarComment {
+  color: green;
+}
+.calendarButton {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem 0 1rem;
+}
+.planDate,
+.planDetail,
+.planInputDate,
+.planInputDetail {
+  margin-right: 1rem;
+}
+.plan {
+  padding: 2rem;
+}
+.planShow {
+  display: flex;
+  justify-content: space-around;
+}
+.planShowTitle {
+  padding: 1rem 0 0 1rem;
 }
 #calendar {
   display: flex;
@@ -151,7 +188,13 @@ td.is-disabled {
 }
 .weatherDetail {
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
+}
+
+.today,
+.tomorrow,
+.dayAfter {
+  padding: 0 2rem 2rem 2rem;
 }
 
 .weatherTitle {

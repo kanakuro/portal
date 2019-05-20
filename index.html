@@ -47,22 +47,49 @@
         </div>
         <div>
           <div class="scheduleDiv">
-            <div class="title2">schedule</div>
+            <div class="title1">schedule</div>
             <div class="content1">
-              <button id="prev" type="button">前の月</button>
-              <button id="next" type="button">次の月</button>
-              <div id="calendar"></div>
+              <div class="calendar">
+                <div class="calendarButton">
+                  <button id="prev" type="button">前の月</button>
+                  <button id="next" type="button">次の月</button>
+                </div>
+                <div id="calendar"></div>
+                <div class="calendarComment">
+                  ↑日付をクリックして予定を登録しよう
+                </div>
+              </div>
+              <div class="plan">
+                <div class="planInput">
+                  <div class="planInputDate">
+                    日付
+                  </div>
+                  <input type="text" class="planDate" name="planDate" />
+                  <div class="planInputDetail">
+                    予定
+                  </div>
+                  <input type="text" class="planDetail" name="planDetail" />
+                  <button id="savePlan">登録</button>
+                </div>
+                <div>
+                  <div class="planShowTitle">登録した予定一覧</div>
+                  <div class="planShow">
+                    <div id="dates"></div>
+                    <div id="details"></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="weatherDiv">
-            <div class="title3">weather</div>
-            <div class="content1">
-              <div id="result"><button id="btn1">天気予報</button></div>
+            <div class="title2">weather</div>
+            <div class="content2">
+              <div id="result"><button id="btn1">天気予報click!</button></div>
               <div id="weather"></div>
             </div>
           </div>
           <div class="newsDiv">
-            <div class="title4">news</div>
+            <div class="title3">news</div>
           </div>
           <div class="albumDiv">
             <div class="title4">album</div>
@@ -98,7 +125,9 @@
     </div>
     <script src="main.js"></script>
     <script>
-      // 天気予報api
+      ///////////////
+      // 天気予報api//
+      ///////////////
       $(function() {
         $("#btn1").click(function() {
           $.ajax({
@@ -187,7 +216,9 @@
         });
       });
 
-      // サイドバー表示
+      /////////////////
+      // サイドバー表示//
+      /////////////////
       $(function() {
         $("#button").click(function() {
           $("#sidebar").toggle("slow");
@@ -199,7 +230,9 @@
         });
       });
 
-      // カレンダー表示
+      /////////////////
+      // カレンダー表示//
+      /////////////////
       window.onload = function makeCalendar() {
         const weeks = ["日", "月", "火", "水", "木", "金", "土"];
         const date = new Date();
@@ -289,12 +322,37 @@
         document.querySelector("#next").addEventListener("click", moveCalendar);
         document.addEventListener("click", function(e) {
           if (e.target.classList.contains("calendar_td")) {
-            alert("クリックした日付は" + e.target.dataset.date + "です");
+            $(".planDate").val(e.target.dataset.date);
           }
         });
 
         showCalendar(year, month);
       };
+
+      ///////////////
+      //schedule表示//
+      ///////////////
+      $(function() {
+        $("#savePlan").click(function() {
+          const date = $(".planDate").val();
+          const detail = $(".planDetail").val();
+          let plans = [];
+          plans.push({ date: date, detail: detail });
+
+          let planDateTxt = "";
+          let planDetailTxt = "";
+          for (i = 0; i < plans.length; i++) {
+            planDateTxt += "<div>" + plans[i].date + "</div>";
+            planDetailTxt += "<div>" + plans[i].detail + "</div>";
+          }
+          const planDate = document.createElement("div");
+          planDate.innerHTML = planDateTxt;
+          document.querySelector("#dates").appendChild(planDate);
+          const planDetail = document.createElement("div");
+          planDetail.innerHTML = planDetailTxt;
+          document.querySelector("#details").appendChild(planDetail);
+        });
+      });
     </script>
   </body>
 </html>
