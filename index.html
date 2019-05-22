@@ -90,6 +90,12 @@
           </div>
           <div class="newsDiv">
             <div class="title3">news</div>
+            <div class="content3">
+              <div id="newsButton">
+                <button id="btn2">今日のニュース click!</button>
+              </div>
+              <div id="newsTopics"></div>
+            </div>
           </div>
           <div class="albumDiv">
             <div class="title4">album</div>
@@ -125,6 +131,28 @@
     </div>
     <script src="main.js"></script>
     <script>
+      ///////////////
+      // news api  //
+      ///////////////
+      $(function() {
+        $("#btn2").click(function() {
+          $.ajax({
+            url: "http://localhost:8888/newsServerSide.php",
+            type: "GET",
+            dataType: "json"
+            // data: {
+            //   city: "270000"
+            // }
+          })
+            .done(data => {
+              sonsole.log(data);
+            })
+            .fail(data => {
+              console.log(data, "fail");
+            });
+        });
+      });
+
       ///////////////
       // 天気予報api//
       ///////////////
