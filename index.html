@@ -89,12 +89,16 @@
             </div>
           </div>
           <div class="newsDiv">
-            <div class="title3">news</div>
+            <div class="title3">pics</div>
             <div class="content3">
-              <div id="newsButton">
-                <button id="btn2">今日のニュース click!</button>
+              <div>
+                <button id="upload">upload</button>
+                <span id="download"></span>
               </div>
-              <div id="newsTopics"></div>
+              <div>
+                <input type="file" id="upload-file" />
+                <textarea id="upload-text" readonly></textarea>
+              </div>
             </div>
           </div>
           <div class="albumDiv">
@@ -131,31 +135,44 @@
     </div>
     <script src="main.js"></script>
     <script>
-      ///////////////
-      // news api  //
-      ///////////////
-      $(function() {
-        $("#btn2").click(function() {
-          $.ajax({
-            url: "http://localhost:8888/newsServerSide.php",
-            type: "GET",
-            dataType: "json"
-            // data: {
-            //   city: "270000"
-            // }
-          })
-            .done(data => {
-              sonsole.log(data);
-            })
-            .fail(data => {
-              console.log(data, "fail");
-            });
-        });
+      /******************************
+                 picture
+      *******************************/
+      const upload = document.getElementById("upload");
+      upload.addEventListener("click", function() {
+        const uploadFile = document.getElementById("upload-file");
+        const file = uploadFile.files[0];
+        if (!file) alert("ファイルを選択してください。");
+        var uploadData;
+        const uploadText = document.getElementById("upload-text");
+        const reader = new FileReader();
+
+        reader.readAsText(file);
+        reader.onload = function() {
+          // そのまま表示
+          uploadText.innerHTML = reader.result;
+          // JSONに変換
+          uploadData = JSON.parse(reader.result);
+        };
+
+        setTimeout(function() {
+          var downloadFile = JSON.stringify(uploadData);
+          var a = document.createElement("a");
+          a.textContent = "download";
+          a.download = "file.json";
+          a.href = URL.createObjectURL(
+            new Blob([downloadFile], { type: "text.plain" })
+          );
+          a.dataset.downloadurl = ["text/plain", a.download, a.href].join(":");
+
+          var downloadLink = document.getElementById("download");
+          downloadLink.appendChild(a);
+        }, 1000);
       });
 
-      ///////////////
-      // 天気予報api//
-      ///////////////
+      /******************************
+                 天気予報api
+        ******************************/
       $(function() {
         $("#btn1").click(function() {
           $.ajax({
@@ -244,9 +261,9 @@
         });
       });
 
-      /////////////////
-      // サイドバー表示//
-      /////////////////
+      /******************************
+                 サイドバー表示
+        ******************************/
       $(function() {
         $("#button").click(function() {
           $("#sidebar").toggle("slow");
@@ -258,9 +275,9 @@
         });
       });
 
-      /////////////////
-      // カレンダー表示//
-      /////////////////
+      /******************************
+                 カレンダー表示
+          *****************************/
       window.onload = function makeCalendar() {
         const weeks = ["日", "月", "火", "水", "木", "金", "土"];
         const date = new Date();
@@ -357,9 +374,9 @@
         showCalendar(year, month);
       };
 
-      ///////////////
-      //schedule表示//
-      ///////////////
+      /******************************
+                schedule表示
+        ******************************/
       $(function() {
         $("#savePlan").click(function() {
           const date = $(".planDate").val();
