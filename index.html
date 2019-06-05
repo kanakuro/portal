@@ -377,27 +377,54 @@
       /******************************
                 schedule表示
         ******************************/
-      $(function() {
-        $("#savePlan").click(function() {
-          const date = $(".planDate").val();
-          const detail = $(".planDetail").val();
-          let plans = [];
-          plans.push({ date: date, detail: detail });
+      let setjson = localStorage.getItem("plans");
+      const plansArray = JSON.parse(setjson);
+      let planDateTxt = "";
+      let planDetailTxt = "";
+      const planDate = document.createElement("div");
+      const planDetail = document.createElement("div");
 
-          let planDateTxt = "";
-          let planDetailTxt = "";
-          for (i = 0; i < plans.length; i++) {
-            planDateTxt += "<div>" + plans[i].date + "</div>";
-            planDetailTxt += "<div>" + plans[i].detail + "</div>";
-          }
-          const planDate = document.createElement("div");
-          planDate.innerHTML = planDateTxt;
-          document.querySelector("#dates").appendChild(planDate);
-          const planDetail = document.createElement("div");
-          planDetail.innerHTML = planDetailTxt;
-          document.querySelector("#details").appendChild(planDetail);
-        });
+      // ロードした時にローカルストレージから表示させる
+      if (setjson !== "") {
+        showPlans(plansArray);
+      }
+
+      $("#savePlan").click(function() {
+        $("#dates").empty();
+        $("#details").empty();
+
+        // 予定一覧をhtml化
+        const date = $(".planDate").val();
+        const detail = $(".planDetail").val();
+        plansArray.push({ date: date, detail: detail });
+        showPlans(plansArray);
+        // // ローカルストレージに保存
+        if ("localStorage" in window && window.localStorage !== null) {
+          setjson = JSON.stringify(plansArray);
+          localStorage.setItem("plans", setjson);
+        } else {
+          console.log("NG");
+        }
+        // //登録後、空欄にする
+        $(".planDate").val("");
+        $(".planDetail").val("");
       });
+
+      // plansを表示させる
+      function showPlans(planDetailArray) {
+        //現在の表示内容をクリア
+        planDateTxt = "";
+        planDetailTxt = "";
+        for (i = 0; i < planDetailArray.length; i++) {
+          planDateTxt += "<div>" + planDetailArray[i].date + "</div>";
+          planDetailTxt += "<div>" + planDetailArray[i].detail + "</div>";
+        }
+        planDate.innerHTML = planDateTxt;
+        console.log(planDateTxt);
+        document.querySelector("#dates").appendChild(planDate);
+        planDetail.innerHTML = planDetailTxt;
+        document.querySelector("#details").appendChild(planDetail);
+      }
     </script>
   </body>
 </html>
