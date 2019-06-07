@@ -378,7 +378,7 @@
                 schedule表示
         ******************************/
       let setjson = localStorage.getItem("plans");
-      const plansArray = JSON.parse(setjson);
+      let plansArray = JSON.parse(setjson);
       let planDateTxt = "";
       let planDetailTxt = "";
       const planDate = document.createElement("div");
@@ -396,6 +396,9 @@
         // 予定一覧をhtml化
         const date = $(".planDate").val();
         const detail = $(".planDetail").val();
+        if (plansArray === null) {
+          plansArray = [];
+        }
         plansArray.push({ date: date, detail: detail });
         showPlans(plansArray);
         // // ローカルストレージに保存
@@ -415,12 +418,13 @@
         //現在の表示内容をクリア
         planDateTxt = "";
         planDetailTxt = "";
-        for (i = 0; i < planDetailArray.length; i++) {
-          planDateTxt += "<div>" + planDetailArray[i].date + "</div>";
-          planDetailTxt += "<div>" + planDetailArray[i].detail + "</div>";
+        if (planDetailArray !== null) {
+          for (i = 0; i < planDetailArray.length; i++) {
+            planDateTxt += "<div>" + planDetailArray[i].date + "</div>";
+            planDetailTxt += "<div>" + planDetailArray[i].detail + "</div>";
+          }
         }
         planDate.innerHTML = planDateTxt;
-        console.log(planDateTxt);
         document.querySelector("#dates").appendChild(planDate);
         planDetail.innerHTML = planDetailTxt;
         document.querySelector("#details").appendChild(planDetail);
