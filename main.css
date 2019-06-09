@@ -148,6 +148,8 @@ li {
   display: flex;
   justify-content: space-around;
   background-color: antiquewhite;
+  width: 40rem;
+  height: 15rem;
 }
 .planShowTitle {
   padding: 1rem 0 0 1rem;
