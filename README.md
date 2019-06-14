@@ -1,28 +1,36 @@
-# portal (for portfolio)
+# portal
 
 ## overview
 
-This is an application for managing schedules with cheking out weather information. And also keeping pictures in albums.
+An application for managing schedules with keeping plans referring to calendar, cheking out weather information, and keeping pictures in albums linking to google photo.
 
-## fuctions
+## features
 
 - schedule
-  - registrer
-  - calendar preview
+  - register appointments
+  - refer to calendar
 - weather information api
 - file upload
 - album
 
-## technology
+## prerequisites
 
-### Dependency
+install server like Apache
 
-just composed of Javascript and JQuery
+```
+brew tap homebrew/dupes
+brew tap homebrew/apache
+brew install httpd24
+```
 
-### DB
+## Dependency
 
-localstorage
+composed of Javascript and JQuery
 
-### others
+## DB
 
-JQuery, API using PHP
+using localstorage
+
+## others
+
+JQuery, API with PHP
