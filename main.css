@@ -224,11 +224,18 @@ td.is-disabled {
   border: double 4px #aaaaaa;
   margin: 10px;
 }
-
+#prev,
+#next {
+  border: double 4px #aaaaaa;
+  width: 5rem;
+}
 #inputBtn:hover,
 #upload:hover,
-#delete:hover {
+#delete:hover,
+#prev:hover,
+#next:hover {
   background-color: #9c9fa1;
+  border: none;
 }
 
 .inputImgArea {
