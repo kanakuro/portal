@@ -100,6 +100,11 @@ li {
   margin: 0 2rem;
 }
 
+.subTitle3 {
+  font-size: 1.5rem;
+  color: rgb(5, 80, 30);
+}
+
 #sidebar {
   display: none;
 }
@@ -128,7 +133,7 @@ li {
   padding: 0 2rem 0 2rem;
 }
 .calendarComment {
-  color: green;
+  color: rgb(5, 80, 30);
 }
 .calendarButton {
   display: flex;
@@ -147,7 +152,7 @@ li {
 .planShow {
   display: flex;
   justify-content: space-around;
-  background-color: antiquewhite;
+  background-color: rgba(221, 219, 219, 0.5);
   width: 40rem;
   height: 15rem;
 }
@@ -206,4 +211,27 @@ td.is-disabled {
 
 .weatherDate {
   font-size: 1rem;
+}
+
+#upload-file {
+  display: none;
+}
+
+#inputBtn,
+#upload,
+#delete {
+  padding: 10px;
+  border: double 4px #aaaaaa;
+  margin: 10px;
+}
+
+#inputBtn:hover,
+#upload:hover,
+#delete:hover {
+  background-color: #9c9fa1;
+}
+
+.inputImgArea {
+  margin: 15px;
+  display: flex;
 }

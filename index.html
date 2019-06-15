@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <title>Document</title>
@@ -88,17 +87,23 @@
               <div id="weather"></div>
             </div>
           </div>
-          <div class="newsDiv">
+          <div class="picsDiv">
             <div class="title3">pics</div>
             <div class="content3">
-              <div>
-                <button id="upload">upload</button>
-                <span id="download"></span>
+              <div class="subTitle3">today's fav</div>
+              <div class="inputImgArea">
+                <label for="upload-file" id="inputBtn">
+                  Choose picture!
+                  <input type="file" id="upload-file" onchange="fileChange()" />
+                </label>
+                <div>
+                  <button id="upload">upload</button>
+                  <button id="delete">delete</button>
+                  <span id="download"></span>
+                </div>
               </div>
-              <div>
-                <input type="file" id="upload-file" />
-                <textarea id="upload-text" readonly></textarea>
-              </div>
+
+              <img src="#" alt="today's pic here!" id="pic01" />
             </div>
           </div>
           <div class="albumDiv">
@@ -133,46 +138,71 @@
         </div>
       </div>
     </div>
-    <script src="main.js"></script>
     <script>
       /******************************
-                 picture
-      *******************************/
-      const upload = document.getElementById("upload");
-      upload.addEventListener("click", function() {
+                       picture
+            *******************************/
+      const uploadBtn = document.getElementById("upload");
+      let imgURL = "";
+      // fileをinputした時
+      function fileChange() {
         const uploadFile = document.getElementById("upload-file");
         const file = uploadFile.files[0];
-        if (!file) alert("ファイルを選択してください。");
+        if (!file) alert("画像を選択してください。");
         var uploadData;
         const uploadText = document.getElementById("upload-text");
         const reader = new FileReader();
 
-        reader.readAsText(file);
+        reader.readAsDataURL(file);
         reader.onload = function() {
-          // そのまま表示
-          uploadText.innerHTML = reader.result;
-          // JSONに変換
-          uploadData = JSON.parse(reader.result);
+          imgURL = reader.result;
         };
 
-        setTimeout(function() {
-          var downloadFile = JSON.stringify(uploadData);
-          var a = document.createElement("a");
-          a.textContent = "download";
-          a.download = "file.json";
-          a.href = URL.createObjectURL(
-            new Blob([downloadFile], { type: "text.plain" })
-          );
-          a.dataset.downloadurl = ["text/plain", a.download, a.href].join(":");
+        window.localStorage["pics"] = imgURL;
+        console.log("変わった");
+      }
 
-          var downloadLink = document.getElementById("download");
-          downloadLink.appendChild(a);
-        }, 1000);
+      // uploadを押した時
+      uploadBtn.addEventListener("click", function() {
+        // アップロード
+
+        // ローカルストレージをクリア
+        // if (localStorage["pics"]) {
+        //   window.localStorage.removeItem("pics");
+        // }
+        window.localStorage["pics"] = imgURL;
+        document.getElementById("pic01").src = window.localStorage["pics"];
       });
 
+      // 画像削除
+      const deleteBtn = document.getElementById("delete");
+      deleteBtn.addEventListener(
+        "click",
+        function() {
+          if (window.localStorage["pics"]) {
+            window.localStorage.removeItem("pics");
+            document.getElementById("pic01").src = window.localStorage["pics"];
+          } else {
+            alert("画像が設定されていません");
+          }
+        },
+        false
+      );
+
+      // ロードした時
+      window.addEventListener(
+        "load",
+        function() {
+          if (window.localStorage["pics"]) {
+            document.getElementById("pic01").src = window.localStorage["pics"];
+          }
+        },
+        false
+      );
+
       /******************************
-                 天気予報api
-        ******************************/
+                       天気予報api
+              ******************************/
       $(function() {
         $("#btn1").click(function() {
           $.ajax({
@@ -262,8 +292,8 @@
       });
 
       /******************************
-                 サイドバー表示
-        ******************************/
+                       サイドバー表示
+              ******************************/
       $(function() {
         $("#button").click(function() {
           $("#sidebar").toggle("slow");
@@ -276,8 +306,8 @@
       });
 
       /******************************
-                 カレンダー表示
-          *****************************/
+                       カレンダー表示
+                *****************************/
       window.onload = function makeCalendar() {
         const weeks = ["日", "月", "火", "水", "木", "金", "土"];
         const date = new Date();
@@ -375,8 +405,8 @@
       };
 
       /******************************
-                schedule表示
-        ******************************/
+                      schedule表示
+              ******************************/
       let setjson = localStorage.getItem("plans");
       let plansArray = JSON.parse(setjson);
       let planDateTxt = "";
